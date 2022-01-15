@@ -15,10 +15,10 @@
 
 BTEST(Circle, colinearFailDbl)
 {
-    vecmath::Point3d a,b,c;                  // defaults are colinear/degenerate.
+    vecmath::Vector3d a,b,c;                  // defaults are colinear/degenerate.
 
     try {
-        vecmath::Point3d center = vecmath::circle3pts(a,b,c);
+        (void) vecmath::circle3pts(a,b,c);
         FAIL() << "circle3pts() should have failed for colinear points\n";
     }
     catch (std::exception&) {
@@ -28,12 +28,12 @@ BTEST(Circle, colinearFailDbl)
 
 BTEST(Circle, basicDbl)
 {
-    vecmath::Point3d a {1.0, 1.0, 0.0};
-    vecmath::Point3d b {2.0, 0.0, 0.0};
-    vecmath::Point3d c {3.0, 1.0, 0.0}; // Center is at (2,1).
+    vecmath::Vector3d a {1.0, 1.0, 0.0};
+    vecmath::Vector3d b {2.0, 0.0, 0.0};
+    vecmath::Vector3d c {3.0, 1.0, 0.0}; // Center is at (2,1).
 
     try {
-        vecmath::Point3d center = vecmath::circle3pts(a,b,c);
+        vecmath::Vector3d center = vecmath::circle3pts(a,b,c);
 
         std::cout << "Solution: " << center << std::endl;
 

@@ -16,10 +16,10 @@ namespace vecmath {
 /**
  * Midpoint between two Points.
  *
- * @return Point3<> result of (a+b)/2
+ * @return Vector3<> result of (a+b)/2
  */
 template <typename fptype>
-Point3<fptype> midpoint(Point3<fptype> const &a, Point3<fptype> const &b)
+Vector3<fptype> midpoint(Vector3<fptype> const &a, Vector3<fptype> const &b)
 {
     return {(a.X()+b.X())/2, (a.Y()+b.Y())/2, (a.Z()+b.Z())/2};
 }

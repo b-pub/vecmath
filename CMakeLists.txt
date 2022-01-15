@@ -18,6 +18,7 @@ add_executable(runtests
     tests/test_circle.cpp
     tests/test_circled.cpp
     tests/test_mats.cpp
+    tests/test_timed.cpp
     ${BTEST_MAIN}
 )
 

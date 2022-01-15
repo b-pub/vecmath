@@ -4,7 +4,7 @@ A simple 3D vector math library
 ## Description
 
 The "vecmath" library is a header-only C++ library for
-representing 3D vectors and points, and performing common
+representing 3D vectors and matrices, and performing common
 calculations with these types.
 
 It is compatible with C++11 through C++20, but by default
@@ -36,15 +36,39 @@ passed tests.
 
 Your project can use the vecmath library by simple inclusion
 of the `<vecmath.h>` header. This header defines the `vecmath::`
-namespace, which contains the `Vector3<>` and `Point3<>`
+namespace, which contains the `Vector3<>` and `Matrix3<>`
 class templates.
 
-Convenience types of `Vector3f`, `Vector3d`, `Point3f`, and `Point3d`
+Convenience types of `Vector3f`, `Vector3d`, `Matrix3f`, and `Matrix3d`
 are provided for cleaner references to `<float>` and `<double>`
 specializations.
 
 Documentation beyond the `vecmath.h` header will be available
 eventually.
+
+## Performance
+
+This library was written for primarily ease of use, with
+performance being secondary. That said, on a iMac (3GHz Intel
+Core i5) with clang 11 (-O3) performance looks like this:
+
+ * M*M = 95 million/sec (approx 380 million/sec V*M)
+ * M*V = 308 million/sec
+
+The generated assembly shows that clang performs autovectorization
+when it can, and achieves good performance.
+
+Before I learned about clang's autovectorization, I made an
+attempt to provide explicit SSE/SSE3 implementations of Vector3
+and Matrix3 (called Vector3fmm and Matrix3fmm), which yielded
+questionable results. M*M rates went up slightly, M*V rates when
+way down.
+
+ * M*M = 105 million/sec (+11% approx)
+ * M*V = 170 million/sec (-45% approx)
+
+The SSE code resides in the scratch/ directory and is not part
+of the default build. It is not heavily tested.
 
 ## Author
 

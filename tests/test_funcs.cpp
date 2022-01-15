@@ -63,38 +63,14 @@ BTEST(Sub, extended_norm)
     ASSERT_FPEQ(len, 1.0f, EPS);
 }
 
-BTEST(Add, point_vector)
+BTEST(Add, vector_vector)
 {
-    vecmath::Point3f pt;
+    vecmath::Vector3f v;
 
-    pt = pt + xunit;
-    ASSERT_FPEQ(pt.X(), 1.0f, EPS);
-    ASSERT_FPEQ(pt.Y(), 0.0f, EPS);
+    v = v + xunit;
+    ASSERT_FPEQ(v.X(), 1.0f, EPS);
+    ASSERT_FPEQ(v.Y(), 0.0f, EPS);
 
-    pt = pt + yunit;
-    ASSERT_FPEQ(pt.Y(), 1.0f, EPS);
-}
-
-BTEST(Add, vector_point)
-{
-    vecmath::Point3f pt;
-
-    pt = xunit + pt;
-    ASSERT_FPEQ(pt.X(), 1.0f, EPS);
-    ASSERT_FPEQ(pt.Y(), 0.0f, EPS);
-
-    pt = yunit + pt;
-    ASSERT_FPEQ(pt.Y(), 1.0f, EPS);
-}
-
-BTEST(Sub, point_point)
-{
-    vecmath::Point3f pt1 {-2.0f, 0.0f, 0.0f};
-    vecmath::Point3f pt2 {0.0f, 2.0f, 0.0f};
-    vecmath::Vector3f dir = pt2 - pt1;
-
-    dir.normalize();
-
-    ASSERT_FPEQ(dir.X(), std::sqrt(2.0f)/2, EPS);
-    ASSERT_FPEQ(dir.Y(), std::sqrt(2.0f)/2, EPS);
+    v = v + yunit;
+    ASSERT_FPEQ(v.Y(), 1.0f, EPS);
 }

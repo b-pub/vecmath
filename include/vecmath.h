@@ -69,80 +69,38 @@ Vector3<fptype> operator*(Matrix3<fptype> const& m,  // V' = M * V
                           Vector3<fptype> const& v);
 
 /**
- * This abstract class is the base storage for 3D vector types.
- *
- * It exists to provide uniform storage, initialization, and
- * common getters.
- *
- * Subclasses of Vector3Base are Points and Vectors and
- * while somewhat interchangeable from a computational
- * perspective, they are separated for semantics.
+ * A direction in 3D space.
  */
-template <typename fptype>
-class Vector3Base {
-  protected:
-    fptype m_v[4];
+template <typename _fptype>
+class Vector3
+{
+  private:
+    _fptype m_v[4];
 
-    constexpr static fptype zero = 0.0;
-    constexpr static fptype one  = 1.0;
-    constexpr static fptype EPS  = 1.0e-6;
+    static constexpr _fptype EPS = 1.0e-6;
 
-    Vector3Base()
+  public:
+    typedef _fptype fptype;
+
+    Vector3()
         : m_v {0, 0, 0, 1}
     { }
-    Vector3Base(fptype x, fptype y, fptype z)
+
+    Vector3(_fptype x, _fptype y, _fptype z = 0)
         : m_v {x, y, z, 1}
     { }
-    virtual ~Vector3Base() { }
 
-    Vector3Base(Vector3Base const &o)
+    Vector3(Vector3 const &o)
     {
         std::memcpy(m_v, o.m_v, sizeof(m_v));
     }
 
-    Vector3Base& operator=(Vector3Base const &o)
+    Vector3& operator=(Vector3 const &o)
     {
         if (this != &o)
             std::memcpy(m_v, o.m_v, sizeof(m_v));
         return *this;
     }
-
-  public:
-    inline fptype X() const noexcept { return m_v[0]; }
-    inline fptype Y() const noexcept { return m_v[1]; }
-    inline fptype Z() const noexcept { return m_v[2]; }
-    inline fptype W() const noexcept { return m_v[3]; }
-
-    /*
-     * The type of the Vector3<> function parameter for these
-     * operators is intentional. Clients use the Vector3<> type,
-     * but the operator needs access to this base class' members.
-     */
-    template <typename FP>
-    friend Vector3<FP> operator*(Vector3<FP> const& v,
-                                 Matrix3<FP> const& m);
-    template <typename FP>
-    friend Vector3<FP> operator*(Matrix3<FP> const& m,
-                                 Vector3<FP> const& v);
-};
-
-/**
- * A direction in 3D space.
- */
-template <typename _fptype>
-class Vector3 : public Vector3Base<_fptype>
-{
-  protected:
-    using Base = Vector3Base<_fptype>;
-
-  public:
-    typedef _fptype fptype;
-
-    Vector3() = default;
-
-    Vector3(_fptype x, _fptype y, _fptype z = Base::zero)
-        : Vector3Base<_fptype>(x,y,z)
-    { }
 
     /**
      * Calculate length of vector.
@@ -150,18 +108,18 @@ class Vector3 : public Vector3Base<_fptype>
      */
     _fptype length() const
     {
-        _fptype result = (Base::X() * Base::X() +
-                          Base::Y() * Base::Y() +
-                          Base::Z() * Base::Z());
+        _fptype result = (X() * X() +
+                          Y() * Y() +
+                          Z() * Z());
 
-        if ( !fpequal(result, Base::one) )
+        if ( !fpequal(result, _fptype(1.0)) )
         {
             result = std::sqrt(result);
         }
 
-        if (result <= Base::EPS)            // snap to zero if close
+        if (result <= EPS)            // snap to zero if close
         {
-            result = Base::zero;
+            result = 0;
         }
 
         return result;
@@ -175,40 +133,34 @@ class Vector3 : public Vector3Base<_fptype>
     {
         _fptype len = length();
 
-        if (len == Base::zero)              // length() snaps to zero
+        if (len == 0)              // length() snaps to zero
         {
-            Base::m_v[0] = Base::m_v[1] = Base::m_v[2] = Base::zero;
-            Base::m_v[3] = Base::one;
+            m_v[0] = m_v[1] = m_v[2] = 0;
+            m_v[3] = 1.0;
         }
-        else if ( !fpequal(len, Base::one) )
+        else if ( !fpequal(len, _fptype(1.0)) )
         {
-            Base::m_v[0] /= len;
-            Base::m_v[1] /= len;
-            Base::m_v[2] /= len;
-            Base::m_v[3]  = Base::one;
+            m_v[0] /= len;
+            m_v[1] /= len;
+            m_v[2] /= len;
+            m_v[3]  = 1.0;
         }
 
         return *this;
     }
-};
 
-/**
- * A location in 3D space.
- */
-template <typename _fptype>
-class Point3 : public Vector3Base<_fptype>
-{
-  protected:
-    using Base = Vector3Base<_fptype>;
+    /* Component getters */
+    inline fptype X() const noexcept { return m_v[0]; }
+    inline fptype Y() const noexcept { return m_v[1]; }
+    inline fptype Z() const noexcept { return m_v[2]; }
+    inline fptype W() const noexcept { return m_v[3]; }
 
-  public:
-    typedef _fptype fptype;
-
-    Point3() = default;
-
-    Point3(_fptype x, _fptype y, _fptype z = Base::zero)
-        : Vector3Base<_fptype>(x,y,z)
-    { }
+    template <typename FP>
+    friend Vector3<FP> operator*(Vector3<FP> const& v,
+                                 Matrix3<FP> const& m);
+    template <typename FP>
+    friend Vector3<FP> operator*(Matrix3<FP> const& m,
+                                 Vector3<FP> const& v);
 };
 
 /**
@@ -248,9 +200,9 @@ class Matrix3
         return *this;
     }
 
-    fptype get(int r, int c) const
+    fptype get(uint32_t r, uint32_t c) const
     {
-        if (r < 0 || r > 3 || c < 0 || c > 3)
+        if (r > 3 || c > 3)
         {
             throw index_error("Matrix3::get()");
         }
@@ -328,8 +280,6 @@ class Matrix3
 /*
  * Type specializations for float and double variants
  */
-using Point3f  = Point3<float>;
-using Point3d  = Point3<double>;
 using Vector3f = Vector3<float>;
 using Vector3d = Vector3<double>;
 using Matrix3f = Matrix3<float>;
@@ -341,7 +291,6 @@ using Matrix3d = Matrix3<double>;
 #include "vecfuncs.h"
 
 #include "vecprint.h"
-
 #include "matops.h"
 
 #endif // VECMATH_H

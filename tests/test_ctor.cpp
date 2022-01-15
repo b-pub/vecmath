@@ -43,38 +43,6 @@ BTEST(Ctor, Vector3f_3arg)
     ASSERT_EQ(v3.W(), 1.0);
 }
 
-BTEST(Ctor, Point3f_default)
-{
-    vecmath::Point3f p3;
-
-    ASSERT_EQ(p3.X(), 0.0);
-    ASSERT_EQ(p3.Y(), 0.0);
-    ASSERT_EQ(p3.Z(), 0.0);
-    ASSERT_EQ(p3.W(), 1.0);
-}
-
-BTEST(Ctor, Point3f_2arg)
-{
-    constexpr vecmath::Point3f::fptype val {1.2};
-    vecmath::Point3f v3(val, 2.0*val);
-
-    ASSERT_EQ(v3.X(), val);
-    ASSERT_EQ(v3.Y(), 2.0*val);
-    ASSERT_EQ(v3.Z(), 0.0);
-    ASSERT_EQ(v3.W(), 1.0);
-}
-
-BTEST(Ctor, Point3f_3arg)
-{
-    constexpr vecmath::Point3f::fptype val {1.2};
-    vecmath::Point3f v3(val, 2.0*val, 3.0*val);
-
-    ASSERT_EQ(v3.X(), val);
-    ASSERT_EQ(v3.Y(), 2.0*val);
-    ASSERT_EQ(v3.Z(), 3.0*val);
-    ASSERT_EQ(v3.W(), 1.0);
-}
-
 BTEST(Ctor, Vector3f_copy)
 {
     vecmath::Vector3f v3(xunit);

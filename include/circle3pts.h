@@ -15,19 +15,18 @@ namespace vecmath {
 /**
  * Calculate a circle from 3 points.
  *
- * Given three Point3<> locations in the X,Y plane (Z=0, but ignored),
+ * Given three Vector3<> locations in the X,Y plane (Z=0, but ignored),
  * calculate the location of the circle's center.
  *
  * The three points should not be colinear. If so, this function
  * throws a vecmath::degenerate_error exception.
  *
- * @returns Point3<> the center of the circle
+ * @returns Vector3<> the center of the circle
  */
 template <typename fptype>
-Point3<fptype> circle3pts(Point3<fptype> a, Point3<fptype> b, Point3<fptype> c)
+Vector3<fptype> circle3pts(Vector3<fptype> a, Vector3<fptype> b, Vector3<fptype> c)
 {
     using Vec3 = Vector3<fptype>;
-    using Pt3 = Point3<fptype>;
 
     // Determine if points a,b,c are colinear.
     const Vec3 dirab = b-a;
@@ -37,8 +36,8 @@ Point3<fptype> circle3pts(Point3<fptype> a, Point3<fptype> b, Point3<fptype> c)
         throw degenerate_error("circle3pts: points a,b,c are colinear");
 
     // Not colinear, so calculate midpoints, perp bisectors, line intersection:
-    Pt3 midab = midpoint(a, b);
-    Pt3 midbc = midpoint(b, c);
+    Vec3 midab = midpoint(a, b);
+    Vec3 midbc = midpoint(b, c);
 
     // perp bisector directions:
     Vec3 midabdir {dirab.Y(), -dirab.X(), 0.0};
