@@ -6,7 +6,7 @@
  *
  */
 /*
- * Printing utility function
+ * Printing utility functions
  */
 #ifndef VM_VECPRINT_H
 #define VM_VECPRINT_H
@@ -33,10 +33,11 @@ std::ostream& operator<<(std::ostream &os, vecmath::Vector3<fptype> const& v)
     return os;
 }
 
-inline
-std::ostream& operator<<(std::ostream &os, vecmath::Matrix3f const& m)
+template <typename fptype>
+std::ostream& operator<<(std::ostream &os, vecmath::Matrix3<fptype> const& m)
 {
-    os << std::fixed << std::setprecision(5) << "\n"
+    int const prec = (sizeof(fptype) == 4) ? 5 : 8;
+    os << std::fixed << std::setprecision(prec)
        << "[[" << m.get(0,0) << ", " << m.get(0,1) << ", " << m.get(0,2) << ", " << m.get(0,3) << "],\n"
        << " [" << m.get(1,0) << ", " << m.get(1,1) << ", " << m.get(1,2) << ", " << m.get(1,3) << "],\n"
        << " [" << m.get(2,0) << ", " << m.get(2,1) << ", " << m.get(2,2) << ", " << m.get(2,3) << "],\n"

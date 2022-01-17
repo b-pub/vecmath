@@ -235,7 +235,6 @@ BTEST(Matrix3Float, CT_rotateZX)
     ASSERT_FPEQ(r.Z(), std::sqrt(2.0f) / 2.0f, EPS);
 }
 
-
 BTEST(Matrix3Float, vmAndMv)
 {
     /*
@@ -258,4 +257,18 @@ BTEST(Matrix3Float, vmAndMv)
     ASSERT_FPEQ(r.X(),  vecmath::Matrix3f::zero, EPS);
     ASSERT_FPEQ(r.Y(), -vecmath::Matrix3f::one, EPS); // along -Y
     ASSERT_FPEQ(r.Z(),  vecmath::Matrix3f::zero, EPS);
+}
+
+BTEST(Matrix3Float, print)
+{
+    vecmath::Matrix3f m;
+    std::cout << "Matrix3f:\n" << m;
+    // visual confirmation currently
+}
+
+BTEST(Matrix3Double, print)
+{
+    vecmath::Matrix3d m;
+    std::cout << "Matrix3d:\n" << m;
+    // visual confirmation currently
 }
